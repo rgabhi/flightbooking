@@ -2,13 +2,18 @@ package flipkart.services;
 
 import flipkart.dao.FlightDao;
 import flipkart.models.Airline;
+import flipkart.models.Features;
 import flipkart.models.Flight;
 import flipkart.models.Location;
 import flipkart.services.strategies.CheapestStrategy;
 import flipkart.services.strategies.SearchStrategy;
 import flipkart.utilities.FlightIdGenerator;
+import flipkart.utilities.RouteIdGenerator;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class FlightService {
 
@@ -26,13 +31,19 @@ public class FlightService {
         }
         Flight flight = new Flight(id, airline, sourceLocation, destinationLocation, price);
         flightDao.getFlights().put(id, flight);
+        String routeId = RouteIdGenerator.generateRouteId(sourceLocation, destinationLocation);
+        if(!flightDao.getRoutes().containsKey(routeId)){
+            flightDao.getRoutes().put(routeId, new HashSet<>());
+        }
+        flightDao.getRoutes().get(routeId).add(flight);
         System.out.println(flight.getAirline().getName() + " " + sourceLocation.getCode() + " -> " + destinationLocation.getCode() + " registered");
     }
 
     // SEARCH FLIGHT
-    public void getFlight(String id) {
+    public void getFlight(String route_id, List<Features> filters) {
         SearchStrategy cheapestStrategy = new CheapestStrategy();
-        List<Flight> flightsCheapest =  cheapestStrategy.searchFlight(id, flightDao);
+        Set<Features> filterSet = new TreeSet<>(filters);
+        List<Flight> flightsCheapest =  cheapestStrategy.searchFlight(route_id, flightDao, filterSet);
         System.out.println(flightsCheapest);
 
     }

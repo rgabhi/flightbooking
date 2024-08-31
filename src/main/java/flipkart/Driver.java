@@ -3,6 +3,7 @@ package flipkart;
 import flipkart.models.Airline;
 import flipkart.models.Location;
 import flipkart.services.FlightService;
+import flipkart.utilities.RouteIdGenerator;
 
 import java.util.Scanner;
 
@@ -10,6 +11,7 @@ public class Driver {
     public static void main(String[] args) {
         FlightService flightService = new FlightService();
         Scanner scanner = new Scanner(System.in);
+
         while (true){
             String command = scanner.nextLine();
             String[] commandArgs = command.split("->");

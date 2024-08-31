@@ -11,9 +11,19 @@ import java.util.Set;
 
 public class FlightDao {
     Map<String, Flight> flights;
+    Map<String, Set<Flight>> routes;
 
     public FlightDao() {
         flights = new HashMap<String, Flight>();
+        routes = new HashMap<>();
+    }
+
+    public Map<String, Set<Flight>> getRoutes() {
+        return routes;
+    }
+
+    public void setRoutes(Map<String, Set<Flight>> routes) {
+        this.routes = routes;
     }
 
     public Map<String, Flight> getFlights() {
